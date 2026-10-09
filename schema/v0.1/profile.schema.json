@@ -1,0 +1,204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://opensportsprofile.org/v0.1/profile.schema.json",
+  "title": "Open Sports Profile 0.1",
+  "description": "Structural rules for an Open Sports Profile document (SPEC.md §4). Rules that need comparison between values, such as a season range whose from is after its to, are not expressible here and are checked by the validator.",
+  "type": "object",
+  "required": [
+    "@context",
+    "@type",
+    "version",
+    "mainEntity"
+  ],
+  "properties": {
+    "@context": {
+      "description": "JSON-LD context (§5). Normally the URL of the published context.",
+      "type": [
+        "string",
+        "object",
+        "array"
+      ]
+    },
+    "@type": {
+      "const": "ProfilePage"
+    },
+    "version": {
+      "const": "0.1"
+    },
+    "dateModified": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "mainEntity": {
+      "$ref": "#/$defs/person"
+    }
+  },
+  "$defs": {
+    "iri": {
+      "type": "string",
+      "minLength": 3,
+      "pattern": "^[A-Za-z][A-Za-z0-9+.-]*:\\S+$"
+    },
+    "season": {
+      "description": "A season label that follows the league's own naming (§4.5): \"2012\" or \"2011-12\".",
+      "type": "string",
+      "pattern": "^\\d{4}(-\\d{2})?$"
+    },
+    "person": {
+      "type": "object",
+      "required": [
+        "@type",
+        "fandom"
+      ],
+      "properties": {
+        "@type": {
+          "const": "Person"
+        },
+        "@id": {
+          "$ref": "#/$defs/iri"
+        },
+        "name": {
+          "type": "string"
+        },
+        "url": {
+          "$ref": "#/$defs/iri"
+        },
+        "fandom": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/fandomRelationship"
+          }
+        },
+        "sameAs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/iri"
+          }
+        }
+      }
+    },
+    "seasonRange": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "$ref": "#/$defs/season"
+        },
+        "to": {
+          "$ref": "#/$defs/season"
+        },
+        "ongoing": {
+          "type": "boolean"
+        }
+      },
+      "if": {
+        "required": [
+          "ongoing"
+        ],
+        "properties": {
+          "ongoing": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "not": {
+          "required": [
+            "to"
+          ]
+        }
+      },
+      "else": {
+        "required": [
+          "from"
+        ]
+      }
+    },
+    "fandomRelationship": {
+      "type": "object",
+      "required": [
+        "@type",
+        "teamName",
+        "relationship"
+      ],
+      "properties": {
+        "@type": {
+          "enum": [
+            "FandomRelationship",
+            "osp:FandomRelationship"
+          ]
+        },
+        "team": {
+          "$ref": "#/$defs/iri"
+        },
+        "teamName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sport": {
+          "description": "The team's sport as a human-readable hint. The entity the team IRI identifies is authoritative if it disagrees (SPEC.md section 3.2). Required on a bare team.",
+          "type": "string",
+          "minLength": 1
+        },
+        "sportId": {
+          "description": "IRI of the Wikidata item for the sport (SPEC.md section 3.2). A hint; the entity is authoritative if they disagree.",
+          "$ref": "#/$defs/iri"
+        },
+        "relationship": {
+          "description": "Known values are current_fan and former_fan. Consumers ignore other values rather than rejecting the profile (§4.4), so this is not an enum.",
+          "type": "string",
+          "minLength": 1
+        },
+        "seasons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/seasonRange"
+          }
+        },
+        "reason": {
+          "type": "string"
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "team"
+          ]
+        },
+        {
+          "required": [
+            "sport"
+          ]
+        }
+      ],
+      "$comment": "A relationship without team is a bare team (SPEC.md section 3.2) and must carry sport.",
+      "if": {
+        "required": [
+          "relationship"
+        ],
+        "properties": {
+          "relationship": {
+            "const": "former_fan"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "seasons": {
+            "items": {
+              "not": {
+                "required": [
+                  "ongoing"
+                ],
+                "properties": {
+                  "ongoing": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

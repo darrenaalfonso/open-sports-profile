@@ -1,0 +1,40 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@vocab": "https://schema.org/",
+    "osp": "https://opensportsprofile.org/ns#",
+    "version": "osp:version",
+    "fandom": {
+      "@id": "osp:fandom",
+      "@container": "@set"
+    },
+    "FandomRelationship": "osp:FandomRelationship",
+    "team": {
+      "@id": "osp:team",
+      "@type": "@id"
+    },
+    "teamName": "osp:teamName",
+    "sport": "osp:sport",
+    "sportId": {
+      "@id": "osp:sportId",
+      "@type": "@id"
+    },
+    "relationship": {
+      "@id": "osp:relationship",
+      "@type": "@vocab",
+      "@context": {
+        "@vocab": "https://opensportsprofile.org/ns#",
+        "current_fan": "osp:CurrentFan",
+        "former_fan": "osp:FormerFan"
+      }
+    },
+    "seasons": {
+      "@id": "osp:seasons",
+      "@container": "@set"
+    },
+    "from": "osp:from",
+    "to": "osp:to",
+    "ongoing": "osp:ongoing",
+    "reason": "osp:reason"
+  }
+}
