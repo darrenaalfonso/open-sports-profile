@@ -483,7 +483,7 @@ None at present.
 
 ## 13. License
 
-Copyright (c) 2026 the Open Sports Profile contributors.
+Copyright (c) 2026 Darren Alfonso and the Open Sports Profile contributors.
 
 - This specification (the prose, tables and examples in this document) is licensed under [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0). The full text is in `LICENSE-SPEC`.
 - The JSON Schema (`schema/`), the JSON-LD context, the example profiles and any validator code are licensed under the [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0). The full text is in `LICENSE`.
