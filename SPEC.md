@@ -1,7 +1,7 @@
 # Open Sports Profile (OSP) — Specification
 
 **Version:** 0.1 (draft)
-**Status:** Working draft, not yet implemented
+**Status:** Working draft
 **Tagline:** A portable format for your sports identity.
 
 ## 1. Introduction
